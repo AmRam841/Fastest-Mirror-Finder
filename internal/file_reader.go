@@ -1,4 +1,69 @@
-package file_reader
+// package internal
+
+// import (
+// 	"bufio"
+// 	"fmt"
+// 	"io"
+// 	"os"
+// 	"strings"
+// )
+
+// func ReadLinesFromFile(path string) (string, error) {
+// 	// open the file with open and evaluate if there is a null path
+// 	fileHandle, err := os.Open(path)
+// 	if err != nil {
+// 		return "", err
+// 	}
+
+// 	defer fileHandle.Close()
+// 	// make a scanner that will read this . then use a builder to read , then
+// 	scanner := bufio.NewReader(fileHandle)
+// 	// creats buffer
+// 	var builder strings.Builder
+// 	// replacer replaces the things i dont want in that file withj nothing , then
+// 	 replacer := strings.NewReplacer("#", "", "$", "")
+//     // the for begins and then the cleaned gets added into buffer
+// 	for {
+// 		textLine, err := scanner.ReadString('\n')
+
+// 		if strings.Contains(textLine, "#Server") {
+
+// 			cleaned := replacer.Replace(textLine)
+// 			//texts = append(texts, replacer.Replace(textLine))
+// 			builder.WriteString(cleaned)
+
+// 		}
+
+// 	// i now make a for that slices instead of replacing
+// 	var texts []string
+// 	for _, line := range textLine {
+// 		parts := strings.SplitN(line , " = " , 2)
+// 		if len(parts) == 2  {
+// 			url :=strings.TrimSpace(parts[1])
+// 			fmt.Println(url1)
+// 		}
+// 	}
+// 	// this is just a err handeling so the
+// 		if err == io.EOF {
+// 			break
+// 		}
+// 		if err != nil {
+// 			return "", fmt.Errorf("error reading from file: %w", err)
+// 		}
+// 	}
+// 	// now i need to make this go in a slice instead of a build string format maybe the string builder was a bad choice , it returns a string , a whole string that is 1000 line ,  how can i put it in a  slice
+
+// 	//splittedText := strings.Split(texts," =")
+// 	println(builder.String())
+// 	fmt.Printf("this is where the slice begins")
+// 	fmt.Println(splittedText)
+
+// 	return builder.String(), nil
+// }
+
+// * i will now start again , i learned so much about strings so i dont consider the above code a mistake but a expantion of knowldge !
+// * im going to implement a loop that will just cut it where it  does not need cleaning !
+package internal
 
 import (
 	"bufio"
@@ -8,35 +73,91 @@ import (
 	"strings"
 )
 
+func ReadLinesFromFile(FilePath string) ([]string,error) {
+	// * file handling ! 
+	fileHandle , err  := os.Open(FilePath)
+	if err != nil {
+		return nil , err
+	}
+		
+	
+	defer  fileHandle.Close()
+	scanner := bufio.NewReader(fileHandle)
 
-func ReadLinesFromFile(path string) (string, error) {
-    fileHandle, err := os.Open(path)
-    if err != nil {
-        return "", err
-    }
-    defer fileHandle.Close()
 
-    scanner := bufio.NewReader(fileHandle)
-    var builder strings.Builder  
+	//make a []string 
+	var texts []string
+	// make a scanner 
+	//make a 
+	replacer := strings.NewReplacer("#","","$","")
+	for{
+		// * checks for errs and eof 
+		line , err := scanner.ReadString('\n')
+		cleaned := replacer.Replace(line)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil , err
+		}
+		if strings.Contains(cleaned , "Server"){
 
-    replacer := strings.NewReplacer("#", "", "$", "") 
 
-    for {
-        textLine, err := scanner.ReadString('\n')
+		
 
-        if strings.Contains(textLine, "#Server") {
-            cleaned := replacer.Replace(textLine)
-            builder.WriteString(cleaned)
-        }
+		
+		parts := strings.SplitN(cleaned , " = " , 2)
+		if len(parts) == 2 {
+			url := strings.TrimSpace(parts[1])
+			texts = append(texts , url)
+		}
+		
+		
+		
+	}
+	
+	fmt.Println(texts)
 
-        
-        if err == io.EOF {
-            break  
-        }
-        if err != nil {
-            return "", fmt.Errorf("error reading from file: %w", err)
-        }
-    }
-    println(builder.String())
-    return builder.String(), nil  
+	}
+	
+	return texts , nil
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
