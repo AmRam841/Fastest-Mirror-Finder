@@ -83,7 +83,7 @@ func ReadLinesFromFile(FilePath string) ([]string,error) {
 	
 	defer  fileHandle.Close()
 	scanner := bufio.NewReader(fileHandle)
-
+	
 
 	//make a []string 
 	var texts []string
@@ -92,14 +92,10 @@ func ReadLinesFromFile(FilePath string) ([]string,error) {
 	replacer := strings.NewReplacer("#","","$","")
 	for{
 		// * checks for errs and eof 
+		// ? seems like is should Change from replace to prefix 
 		line , err := scanner.ReadString('\n')
 		cleaned := replacer.Replace(line)
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			return nil , err
-		}
+		
 		if strings.Contains(cleaned , "Server"){
 
 
@@ -112,7 +108,12 @@ func ReadLinesFromFile(FilePath string) ([]string,error) {
 			texts = append(texts , url)
 		}
 		
-		
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil , err
+		}
 		
 	}
 	
@@ -121,7 +122,7 @@ func ReadLinesFromFile(FilePath string) ([]string,error) {
 	}
 	
 	return texts , nil
-
+	
 
 
 }
