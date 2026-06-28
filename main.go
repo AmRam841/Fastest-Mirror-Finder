@@ -1,7 +1,11 @@
 package main
 
 import (
-	file_reader "Fastest_Mirror_Finder/internal"
+	"fmt"
+	"log"
+	"time"
+
+	"Fastest_Mirror_Finder/internal"
 )
 
 // new extions better comments guide :
@@ -22,7 +26,15 @@ func main() {
 	// TODO first read from a file . we will do this for arch ! how can we read from a file ? and not only a simple file , how can we read the arch mirror files ?
 	// this is the url for arch https://archlinux.org/mirrorlist/all/
 	// * OPTION : ask the user if he/she wants to cache the list
-	//	path := "/home/archedlinux/mirrorlists/arch.txt"
+	path := "/home/archedlinux/mirrorlists/arch.txt"
 	// file_reader.ReadLinesFromFile(path)
-	file_reader.Get_latency()
+	urls, err := internal.FileParser(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	ranked := internal.RankMirrors(urls, 20, 3*time.Second)
+	for i, r := range ranked {
+		fmt.Printf("#%d %s — %v\n", i+1, r.URL, r.Latency)
+	}
 }

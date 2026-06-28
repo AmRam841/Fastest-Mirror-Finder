@@ -132,7 +132,7 @@ import (
 )
 
 // create a fuction that takes a file and returns a chanel of strings
-func FileParser(file string) (<-chan string, error) {
+func FilePareser(file string) (<-chan string, error) {
 	filehandle, err := os.Open(file)
 	if err != nil {
 		return nil, err
